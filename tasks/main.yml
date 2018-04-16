@@ -1,0 +1,14 @@
+---
+
+- name: Install yum dependencies
+  include_tasks: get_yum_dependencies.yml
+
+- name: Creates mission-control directory 
+  file:
+    path: /opt/jfrog/mission-control/
+    state: directory
+
+- name: Extract mission control .tar
+  unarchive:
+    src: ../files/jfmc-redhat-2.1.1.tar.gz
+    dest: /opt/jfrog/mission-control/installer

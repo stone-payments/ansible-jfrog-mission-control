@@ -1,0 +1,23 @@
+---
+# TODO: use java role.
+  - name: Install jdk 8
+    package:
+      name: jdk8
+      state: present
+  - name: Install openssl
+    package:
+      name: openssl 
+      state: present
+  - name: Install PHP FastCGI Process Manager
+    package:
+      name: php-fpm 
+      state: present
+  - name: Install net-tools
+    package:
+      name: net-tools 
+      state: present
+# TODO: Install PHP with role.
+  - name: Install PHP 5.4
+    package:
+      name: php54
+      state: present
