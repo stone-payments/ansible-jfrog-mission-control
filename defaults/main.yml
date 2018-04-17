@@ -1,2 +1,3 @@
 ---
 # Defaults configs for stone-payments.jfrog-mission-control
+missioncontrol_install_jdk8: false

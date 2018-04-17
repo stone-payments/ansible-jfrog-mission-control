@@ -33,8 +33,8 @@ galaxy_info:
   #
   platforms:
   - name: EL
-   versions:
-    - 7
+    versions:
+      - 7
 
   galaxy_tags:
     - artifactory

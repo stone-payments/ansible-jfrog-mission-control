@@ -4,6 +4,8 @@
     package:
       name: jdk8
       state: present
+    when: missioncontrol_install_jdk8
+
   - name: Install openssl
     package:
       name: openssl 
