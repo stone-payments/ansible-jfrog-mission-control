@@ -5,10 +5,11 @@
 
 - name: Creates mission-control directory 
   file:
-    path: /opt/jfrog/mission-control/
+    path: /opt/jfrog/mission-control/installer
     state: directory
 
 - name: Extract mission control .tar
   unarchive:
-    src: ../files/jfmc-redhat-2.1.1.tar.gz
+    src: https://github.com/stone-payments/ansible-jfrog-mission-control/releases/download/v0.1-alpha/jfmc-redhat-2.1.1.tar.gz
     dest: /opt/jfrog/mission-control/installer
+    remote_src: yes
