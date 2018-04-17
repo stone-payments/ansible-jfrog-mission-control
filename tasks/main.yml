@@ -14,3 +14,11 @@
     dest: /opt/jfrog/mission-control/installer
     remote_src: yes
     creates: /opt/jfrog/mission-control/installer/jfmc-redhat-2.1.1
+
+- name: Allow MongoDB to listen on tcp port 27017 (SELinux)
+  seport:
+    ports: 27017
+    proto: tcp
+    setype: mongod_port_t
+    state: present
+  when: jfmc_mongodb_semanage

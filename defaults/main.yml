@@ -1,3 +1,4 @@
 ---
 # Defaults configs for stone-payments.jfrog-mission-control
 jfmc_install_jdk8: false
+jfmc_mongodb_semanage: true
