@@ -1,4 +1,9 @@
 ---
 # handlers file for stone-payments.jfrog-mission-control
+- name: Ensure SELinux file context are applied
+  shell: restorecon -vr /var/opt/jfrog/mission-control/jfi-core/_MASTER_/data
+  register: restorecon
+  changed_when: restorecon.stdout != ""
+
 - name: Run start script
   shell: /opt/jfrog/mission-control/scripts/jfmc.sh start

@@ -1,5 +1,5 @@
 
-- name: Enable needed SELinux booleans ({{ item }})
+- name: "Enable needed SELinux booleans ({{ item }})"
   seboolean:
     name: "{{ item }}"
     state: yes
@@ -9,7 +9,7 @@
     - httpd_can_network_connect
     - httpd_read_user_content
 
-- name: Allow {{ item.name }} to listen port {{ item.port }} on SELinux
+- name: "Allow {{ item.name }} to listen port {{ item.port }} on SELinux"
   seport:
     ports: "{{ item.port }}"
     proto: tcp
@@ -32,8 +32,3 @@
     target: '/var/opt/jfrog/mission-control/jfi-core/_MASTER_/data(/.*)?'
     setype: httpd_sys_content_t
     state: present
-
-- name: Ensure SELinux file context are applied
-  shell: restorecon -vr /var/opt/jfrog/mission-control/jfi-core/_MASTER_/data
-  register: restorecon
-  changed_when: restorecon.stdout != ""

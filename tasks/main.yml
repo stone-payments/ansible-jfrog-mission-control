@@ -38,7 +38,9 @@
 - name: Run installer shell script
   shell: /opt/jfrog/mission-control/installer/jfmc-redhat-2.1.1/ansible_installJFMC-redhat.sh
   when: not service_status.stat.exists
-  notify: Run start script
+  notify: 
+    - Ensure SELinux file context are applied
+    - Run start script
 
 - name: Enable nginx service
   service:
