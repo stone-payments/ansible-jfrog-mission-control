@@ -15,7 +15,7 @@
     proto: tcp
     setype: http_port_t
     state: present
-  with_items
+  with_items:
     - { port=8080 , name="mission-control"}
     - { port=8085 , name="jfi-scheduler"}
     - { port=8087 , name="jfi-executor"}
