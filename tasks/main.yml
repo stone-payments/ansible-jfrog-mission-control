@@ -26,69 +26,69 @@
     dest: /opt/jfrog/mission-control/installer/jfmc-redhat-2.1.1/ansible_installJFMC-redhat.sh
     mode: 0755
 
-- name: Allow MongoDB to listen on tcp port 27017 (SELinux rule)
-  seport:
-    ports: 27017
-    proto: tcp
-    setype: mongod_port_t
-    state: present
-    reload: yes
-  when: jfmc_mongodb_semanage
+# - name: Allow MongoDB to listen on tcp port 27017 (SELinux rule)
+#   seport:
+#     ports: 27017
+#     proto: tcp
+#     setype: mongod_port_t
+#     state: present
+#     reload: yes
+#   when: jfmc_mongodb_semanage
 
 - name: Check if jfmc service exists
   stat: path=/etc/init.d/mission-control
   register: service_status
   changed_when: false
 
-- name: create mongodb-conf directory
-  file:
-    state: directory
-    path: "{{ jfmc_mongodb_conf_pidFile | dirname }}"
-    mode: "0777"
-  when: not service_status.stat.exists
+# - name: create mongodb-conf directory
+#   file:
+#     state: directory
+#     path: "{{ jfmc_mongodb_conf_pidFile | dirname }}"
+#     mode: "0777"
+#   when: not service_status.stat.exists
 
-- name: configure SELinux file contexts for mongodb
-  sefcontext:
-    target: "{{ item.target }}"
-    setype: "{{ item.setype }}"
-    reload: true
-    state: present
-  with_items:
-    - target: "{{ jfmc_mongodb_daemon_bin }}"
-      setype: mongod_exec_t
-    - target: "{{ jfmc_mongodb_conf_dbPath }}(/.*)?"
-      setype: mongod_var_lib_t
-    - target: "{{ jfmc_mongodb_conf_pidFile | dirname }}(/.*)?"
-      setype: mongod_var_run_t
-  when: jfmc_mongodb_semanage
+# - name: configure SELinux file contexts for mongodb
+#   sefcontext:
+#     target: "{{ item.target }}"
+#     setype: "{{ item.setype }}"
+#     reload: true
+#     state: present
+#   with_items:
+#     - target: "{{ jfmc_mongodb_daemon_bin }}"
+#       setype: mongod_exec_t
+#     - target: "{{ jfmc_mongodb_conf_dbPath }}(/.*)?"
+#       setype: mongod_var_lib_t
+#     - target: "{{ jfmc_mongodb_conf_pidFile | dirname }}(/.*)?"
+#       setype: mongod_var_run_t
+#   when: jfmc_mongodb_semanage
 
-- name: Set SELinux as permissive
-  shell: setenforce 0
-  when: not service_status.stat.exists
+# - name: Set SELinux as permissive
+#   shell: setenforce 0
+#   when: not service_status.stat.exists
 
 - name: Run installer shell script
   shell: /opt/jfrog/mission-control/installer/jfmc-redhat-2.1.1/ansible_installJFMC-redhat.sh
   when: not service_status.stat.exists
   notify: Run start script
 
-- name: Set SELinux as enforce
-  shell: setenforce 1
-  when: not service_status.stat.exists
+# - name: Set SELinux as enforce
+#   shell: setenforce 1
+#   when: not service_status.stat.exists
 
-- name: ensure SELinux file context are applied
-  shell: restorecon -vr "{{ item }}"
-  with_items:
-    - "{{ jfmc_mongodb_daemon_bin }}"
-    - "{{ jfmc_mongodb_conf_dbPath }}"
-    - "{{ jfmc_mongodb_conf_pidFile | dirname }}"
-  register: restorecon
-  changed_when: restorecon.stdout != ""
-  when: jfmc_mongodb_semanage
+# - name: ensure SELinux file context are applied
+#   shell: restorecon -vr "{{ item }}"
+#   with_items:
+#     - "{{ jfmc_mongodb_daemon_bin }}"
+#     - "{{ jfmc_mongodb_conf_dbPath }}"
+#     - "{{ jfmc_mongodb_conf_pidFile | dirname }}"
+#   register: restorecon
+#   changed_when: restorecon.stdout != ""
+#   when: jfmc_mongodb_semanage
 
-- name: fix mongodb-conf directory owner
-  file:
-    state: directory
-    path: "{{ jfmc_mongodb_conf_pidFile | dirname }}"
-    owner: mongod
-    mode: "0755"
+# - name: fix mongodb-conf directory owner
+#   file:
+#     state: directory
+#     path: "{{ jfmc_mongodb_conf_pidFile | dirname }}"
+#     owner: mongod
+#     mode: "0755"
 # TODO: handle /tmp mounted with noexec. (exec in tmp needed by postgres).

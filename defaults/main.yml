@@ -26,6 +26,7 @@ jfmc_mongodb_password: password
 jfmc_mongodb_daemon_bin: /usr/bin/mongod
 jfmc_mongodb_conf_dbPath: /var/lib/mongo
 jfmc_mongodb_conf_pidFile: /var/run/mongod/mongod.pid
+jfmc_externalize_mongodb: false
 
 # jfmc internal elastic search
 jfmc_elastic_host: localhost

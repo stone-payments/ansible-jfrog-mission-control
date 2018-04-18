@@ -25,6 +25,8 @@ export EXECUTOR_BASE_URL="http://localhost:$JFMC_EXECUTOR_PORT"
 export EXECUTOR_URL="http://localhost:$JFMC_EXECUTOR_PORT/executorservice"
 export JFMC_URL="http://localhost:$JFMC_PORT"
 
+EXTERNALIZE_MONGO="{{jfmc_externalize_mongodb}}"
+
 POSTGRES_HOME_DEFAULT=/var/opt/postgres
 POSTGRES_PATH="/opt/PostgreSQL/9.6/bin"
 POSTGRES_ROOT_USER_ID="{{jfmc_postgres_root_user_id}}"
@@ -1343,50 +1345,9 @@ isMongoInstalled() {
     fi
 }
 
-getMongoDetails() {
-
-    getUserInput "Please enter the $MONGO_LABEL Host" "$MONGODB_HOST"
-    MONGODB_HOST=$users_choice
-    SPRING_DATA_MONGODB_HOST=$users_choice
-
-    #Ask the port to connect to
-    getUserInput "Please enter the $MONGO_LABEL port" "$JFMC_MONGO_PORT"
-    JFMC_MONGO_PORT=$users_choice
-    SPRING_DATA_MONGODB_PORT=$users_choice
-
-    MONGO_URL="$MONGODB_HOST:$JFMC_MONGO_PORT"
-}
-
-
 externalizeMongo() {
-    local INSTALLATION_MSG="Install/Upgrade $MONGO_LABEL as part of this installation? \n(Choose n if you want to externalize $MONGO_LABEL)"
-    log "$INSTALLATION_MSG"
-
-    getUserChoice "Install $MONGO_LABEL? [Y/n]" "y n Y N" "y"
-    INSTALL_MONGO=${users_choice}
-    
-    if [[ $INSTALL_MONGO =~ n|N ]]; then
-
-        getMongoDetails
-
-        if [ ! -f "${MONGO_USERS_CREATED_FILE}" ];then
-            log "If $MONGO_LABEL is installed as a service on this machine, the installer can attempt to seed the databases and users. \
-    (Choose 'N' if $MONGO_LABEL is NOT installed locally. You will need to create the databases and users before starting Mission control)" #Don't add a tab to this line
-
-            getUserChoice "Attempt to seed $MONGO_LABEL? [y/N]" "y n Y N" "n"
-            SEED_MONGO=$users_choice
-            if [[ $SEED_MONGO =~ y|Y ]]; then
-                export LOCAL_MONGO="yes"
-                createMongoData
-            else
-                warn "Files which can be used to seed $MONGO_LABEL are available at [${JFMC_DATA}/seed_data] \
-    Please seed $MONGO_LABEL before starting Mission-Control" #Don't add a tab to this line
-            fi
-        fi
-
-    else
-        installNewMongoDB
-    fi
+        export LOCAL_MONGO="yes"
+        createMongoData
 }
 
 installMongoDB() {
@@ -1401,7 +1362,7 @@ installMongoDB() {
 
     isMongoInstalled
 
-    if [[ $TYPE_OF_INSTALLATION == "standard" ]];then
+    if [[ $EXTERNALIZE_MONGO != "true" ]];then
         if [[ $IS_UPGRADE != true || $INSTALL_MONGO =~ y|Y ]]; then
             installNewMongoDB
         else
