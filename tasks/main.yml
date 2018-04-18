@@ -43,6 +43,7 @@
 - name: Run installer shell script
   script: /opt/jfrog/mission-control/installer/jfmc-redhat-2.1.1/ansible_installJFMC-redhat.sh
   when: not service_status.stat.exists
+  become: yes
   notify: Run start script
 
 # TODO: handle /tmp mounted with noexec. (exec in tmp needed by postgres).
