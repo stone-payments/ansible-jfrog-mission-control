@@ -23,6 +23,9 @@ jfmc_mongo_port: 27017
 jfmc_spring_data_mongodb_host: localhost
 jfmc_mongodb_username: jfrog_insight
 jfmc_mongodb_password: password
+jfmc_mongodb_daemon_bin: /usr/bin/mongod
+jfmc_mongodb_conf_dbPath: /var/lib/mongo
+jfmc_mongodb_conf_pidFile: /var/run/mongod/mongod.pid
 
 # jfmc internal elastic search
 jfmc_elastic_host: localhost
