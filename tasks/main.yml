@@ -35,11 +35,17 @@
     reload: yes
   when: jfmc_mongodb_semanage
 
+- name: Check if jfmc service exists
+  stat: path=/etc/init.d/mission-control
+  register: service_status
+  changed_when: false
+
 - name: create mongodb-conf directory
   file:
     state: directory
     path: "{{ jfmc_mongodb_conf_pidFile | dirname }}"
     mode: "0777"
+    when: not service_status.stat.exists
 
 - name: configure SELinux file contexts for mongodb
   sefcontext:
@@ -56,15 +62,18 @@
       setype: mongod_var_run_t
   when: jfmc_mongodb_semanage
 
-- name: Check if jfmc service exists
-  stat: path=/etc/init.d/mission-control
-  register: service_status
-  changed_when: false
+- name: Set SELinux as permissive
+  shell: setenforce 0
+  when: not service_status.stat.exists
 
 - name: Run installer shell script
   shell: /opt/jfrog/mission-control/installer/jfmc-redhat-2.1.1/ansible_installJFMC-redhat.sh
   when: not service_status.stat.exists
   notify: Run start script
+
+- name: Set SELinux as enforce
+  shell: setenforce 1
+  when: not service_status.stat.exists
 
 - name: ensure SELinux file context are applied
   shell: restorecon -vr "{{ item }}"
