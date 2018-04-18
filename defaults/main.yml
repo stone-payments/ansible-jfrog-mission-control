@@ -2,3 +2,33 @@
 # Defaults configs for stone-payments.jfrog-mission-control
 jfmc_install_jdk8: false
 jfmc_mongodb_semanage: true
+
+# Jfrog mission control microservices ports
+jfmc_port: 8080
+jfmc_scheduler_port: 8085
+jfmc_executor_port: 8087
+jfmc_core_port: 8090
+jfmc_ssl_core_port: 8089
+
+# jfmc internal postgres
+jfmc_postgres_root_user_id: postgres
+jfmc_postgres_root_user_pwd: postgres
+jfmc_postgres_omni_db: quartzdb
+jfmc_postgres_user: quartzdb
+jfmc_postgres_pwd: password
+jfmc_postgres_port: 5432
+
+# jfmc internal mongodb
+jfmc_mongo_port: 27017
+jfmc_spring_data_mongodb_host: localhost
+jfmc_mongodb_username: jfrog_insight
+jfmc_mongodb_password: password
+
+# jfmc internal elastic search
+jfmc_elastic_host: localhost
+jfmc_elastic_address: "http://{{jfmc_elastic_host}}"
+jfmc_elastic_port: 9200
+jfmc_elastic_communication_node_port: 9300
+jfmc_elastic_cluster_name: es-cluster
+jfmc_elastic_search_username: elastic
+jfmc_elastic_search_password: changeme

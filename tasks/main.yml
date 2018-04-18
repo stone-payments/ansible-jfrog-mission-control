@@ -15,8 +15,17 @@
     remote_src: yes
     creates: /opt/jfrog/mission-control/installer/jfmc-redhat-2.1.1
 
-# TODO: Edit script to allow selinux enforcing when exists rule to allow mongodb port usage.
-- name: Allow MongoDB to listen on tcp port 27017 (SELinux)
+- name: Remove original shell script installer
+  file:
+    path: /opt/jfrog/mission-control/installer/jfmc-redhat-2.1.1/installJFMC-redhat.sh
+    state: absent
+
+- name: Generate install script
+  template:
+    src: ../templates/installJFMC-redhat.sh
+    dest: /opt/jfrog/mission-control/installer/jfmc-redhat-2.1.1/ansible_installJFMC-redhat.sh
+
+- name: Allow MongoDB to listen on tcp port 27017 (SELinux rule)
   seport:
     ports: 27017
     proto: tcp
@@ -24,5 +33,14 @@
     state: present
     reload: yes
   when: jfmc_mongodb_semanage
+
+- name: Check if jfmc service exists
+  stat: path=/etc/init.d/mission-control
+  register: service_status
+
+- name: Run installer shell script
+  script: /opt/jfrog/mission-control/installer/jfmc-redhat-2.1.1/ansible_installJFMC-redhat.sh
+  when: not service_status.stat.exists
+  notify: Run start script
 
 # TODO: handle /tmp mounted with noexec. (exec in tmp needed by postgres).

@@ -7,11 +7,12 @@ export JFMC_LOGS="$JFMC_DATA/logs"
 export JFMC_USER=jfrogmc
 export JFMC_GROUP=jfrogmc
 
-export JFMC_PORT=8080
-export JFMC_SCHEDULER_PORT=8085
-export JFMC_EXECUTOR_PORT=8087
-export JFMC_CORE_PORT=8090
-export JFMC_SSL_CORE_PORT=8089
+export JFMC_PORT={{jfmc_port}}
+export JFMC_SCHEDULER_PORT={{jfmc_scheduler_port}}
+export JFMC_EXECUTOR_PORT={{jfmc_executor_port}}
+export JFMC_CORE_PORT={{jfmc_core_port}}
+export JFMC_SSL_CORE_PORT={{jfmc_ssl_core_port}}
+
 
 export MANDATORY_PORT_LIST="JFMC_PORT JFMC_SCHEDULER_PORT JFMC_EXECUTOR_PORT JFMC_CORE_PORT JFMC_SSL_CORE_PORT"
 
@@ -26,40 +27,41 @@ export JFMC_URL="http://localhost:$JFMC_PORT"
 
 POSTGRES_HOME_DEFAULT=/var/opt/postgres
 POSTGRES_PATH="/opt/PostgreSQL/9.6/bin"
-POSTGRES_ROOT_USER_ID="postgres"
-POSTGRES_ROOT_USER_PWD="postgres"
+POSTGRES_ROOT_USER_ID="{{jfmc_postgres_root_user_id}}"
+POSTGRES_ROOT_USER_PWD="{{jfmc_postgres_root_user_pwd}}"
 POSTGRES_SERVICE="postgresql-9.6"
-POSTGRES_OMNI_DB="quartzdb"
-POSTGRES_USER="quartzdb"
-POSTGRES_PWD="password"
+POSTGRES_OMNI_DB="{{jfmc_postgres_omni_db}}"
+POSTGRES_USER="{{jfmc_postgres_user}}"
+POSTGRES_PWD="{{jfmc_postgres_pwd}}"
 
 getPostgresDefaults() {
-    JFMC_POSTGRES_PORT=5432
+    JFMC_POSTGRES_PORT={{jfmc_postgres_port}}
     POSTGRESDB_HOST="localhost"
     QUARTZ_DB_URL="$POSTGRESDB_HOST:$JFMC_POSTGRES_PORT"
 }
 
 getMongoDefaults() {
-    export JFMC_MONGO_PORT=27017
+    export JFMC_MONGO_PORT={{jfmc_mongo_port}}
     export SPRING_DATA_MONGODB_PORT="$JFMC_MONGO_PORT"
-    export SPRING_DATA_MONGODB_HOST="localhost"
+    export SPRING_DATA_MONGODB_HOST="{{jfmc_spring_data_mongodb_host}}"
     export MONGODB_HOST="$SPRING_DATA_MONGODB_HOST"
     export MONGO_URL="$MONGODB_HOST:$JFMC_MONGO_PORT"
-    export MONGODB_USERNAME="jfrog_insight"
-    export MONGODB_PASSWORD="password"
+    export MONGODB_USERNAME="{{jfmc_mongodb_username}}"
+    export MONGODB_PASSWORD="{{jfmc_mongodb_password}}"
 }
 
 getElasticSearchDefaults() {
-    ELASTIC_ADDRESS="http://localhost"
-    JFMC_ELASTIC_PORT=9200
-    JFMC_ELASTIC_COMMUNICATION_NODE_PORT=9300
+    ELASTIC_ADDRESS="{{jfmc_elastic_address}}"
+    JFMC_ELASTIC_PORT={{jfmc_elastic_port}}
+    JFMC_ELASTIC_COMMUNICATION_NODE_PORT={{jfmc_elastic_communication_node_port}}
     ELASTIC_SEARCH_URL="$ELASTIC_ADDRESS:$JFMC_ELASTIC_PORT"
-    ELASTIC_CLUSTER_NAME="es-cluster"
-    ELASTIC_COMMUNICATION_NODE_URL="localhost:$JFMC_ELASTIC_COMMUNICATION_NODE_PORT"
-    ELASTIC_SEARCH_USERNAME="elastic"
-    ELASTIC_SEARCH_PASSWORD="changeme"
+    ELASTIC_CLUSTER_NAME="{{jfmc_elastic_cluster_name}}"
+    ELASTIC_COMMUNICATION_NODE_URL="{{jfmc_elastic_host}}:$JFMC_ELASTIC_COMMUNICATION_NODE_PORT"
+    ELASTIC_SEARCH_USERNAME="{{jfmc_elastic_search_username}}"
+    ELASTIC_SEARCH_PASSWORD="{{jfmc_elastic_search_password}}"
 }
 
+{% raw %}
 # ------------------------------------------------------------------------------
 # Utilities functions
 # ------------------------------------------------------------------------------
@@ -82,7 +84,13 @@ checkSELinux() {
                     if [[ "${DIST}" =~ RedHat|CentOS ]] && [ "${DIST_VER}" == "6" ]; then
                         log "No need for special SElinux configuration in RedHat/CentOS 6"
                     else
-                        errorExit "To continue with the installation, you must set a new SELinux policy rule to allow mongodb to run."
+                        MONGO_PORT_RULE=$(semanage export | grep "mongod_port_t -p tcp 27017")
+                        if [[ -z "$MONGO_PORT_RULE" ]]; then
+                            echo; log "SELinux is in enforce mode and port rule named mongod_port_t for tcp port 27017 not found."
+                            errorExit "To continue with the installation, you must set a new SELinux policy rule to allow mongodb to run."
+                        else
+                            echo; log "SELinux mongodb port rule found. '$MONGO_PORT_RULE'"
+                        fi
                     fi
                     ;;
             esac
@@ -2296,23 +2304,10 @@ checkPortsAvailability() {
 }
 
 determineTypeOfInstall() {
-    if [[ $IS_UPGRADE != true ]]; then
-        title "Choose Type of Installation"
-        log "Mission Control uses $ELASTIC_SEARCH_LABEL, $MONGO_LABEL and $POSTGRES_LABEL. The installer can install these automatically. \n\
-    Would you prefer a standard installation? (If you choose 'N', the installer will ask you before installing any 3rd-party database)"
-
-        getUserChoice "Perform a standard Installation? [Y/n]" "y n Y N" "y"
-    else
-        title "Choose Type of Upgrade"
-        log "Would you prefer a standard Upgrade? (Choose 'N' if you want to change any choices you made earlier)"
-
-        getUserChoice "Perform a standard upgrade? [Y/n]" "y n Y N" "y"
-    fi
+    log "Mission Control uses $ELASTIC_SEARCH_LABEL, $MONGO_LABEL and $POSTGRES_LABEL. The installer will install these automatically. \n\
+    The original script supports external dbs, but this ansible automated installation hasnt it implemented yet."
 
     TYPE_OF_INSTALLATION="standard"
-    if [[ $users_choice =~ n|N ]]; then
-        TYPE_OF_INSTALLATION="advanced"
-    fi
 }
 
 main() {
@@ -2420,3 +2415,5 @@ cp "$INSTALLATION_LOG_FILE" $NEW_LOG_LOC
 
 echo -e "\033[32mNOTE: Installation log file can be found here: $NEW_LOG_LOC\033[0m"
 exit $?
+
+{% endraw %}
