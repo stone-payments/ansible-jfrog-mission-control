@@ -39,7 +39,7 @@
   file:
     state: directory
     path: "{{ jfmc_mongodb_conf_pidFile | dirname }}"
-    mode: "0755"
+    mode: "0777"
 
 - name: configure SELinux file contexts for mongodb
   sefcontext:
