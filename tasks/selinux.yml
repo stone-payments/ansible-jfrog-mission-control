@@ -16,11 +16,16 @@
     setype: http_port_t
     state: present
   with_items:
-    - { port=8080 , name="mission-control"}
-    - { port=8085 , name="jfi-scheduler"}
-    - { port=8087 , name="jfi-executor"}
-    - { port=8090 , name="jfi-core"}
-    - { port=8089 , name="jfi-core-ssl"}
+    - name: "mission-control"
+      port: 8080
+    - name: "jfi-scheduler"
+      port: 8085
+    - name: "jfi-executor"
+      port: 8087
+    - name: "jfi-core"
+      port: 8090
+    - name: "jfi-core-ssl"
+      port: 8089
 
 - name: Allow php-fpm to read jfi-core files
   sefcontext:
