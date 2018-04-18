@@ -56,16 +56,6 @@
       setype: mongod_var_run_t
   when: jfmc_mongodb_semanage
 
-- name: ensure SELinux file context are applied
-  shell: restorecon -vr "{{ item }}"
-  with_items:
-    - "{{ jfmc_mongodb_daemon_bin }}"
-    - "{{ jfmc_mongodb_conf_dbPath }}"
-    - "{{ jfmc_mongodb_conf_pidFile | dirname }}"
-  register: restorecon
-  changed_when: restorecon.stdout != ""
-  when: jfmc_mongodb_semanage
-
 - name: Check if jfmc service exists
   stat: path=/etc/init.d/mission-control
   register: service_status
@@ -76,4 +66,20 @@
   when: not service_status.stat.exists
   notify: Run start script
 
+- name: ensure SELinux file context are applied
+  shell: restorecon -vr "{{ item }}"
+  with_items:
+    - "{{ jfmc_mongodb_daemon_bin }}"
+    - "{{ jfmc_mongodb_conf_dbPath }}"
+    - "{{ jfmc_mongodb_conf_pidFile | dirname }}"
+  register: restorecon
+  changed_when: restorecon.stdout != ""
+  when: jfmc_mongodb_semanage
+
+- name: fix mongodb-conf directory owner
+  file:
+    state: directory
+    path: "{{ jfmc_mongodb_conf_pidFile | dirname }}"
+    owner: mongod
+    mode: "0755"
 # TODO: handle /tmp mounted with noexec. (exec in tmp needed by postgres).
