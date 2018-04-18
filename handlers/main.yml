@@ -1,4 +1,4 @@
 ---
 # handlers file for stone-payments.jfrog-mission-control
 - name: Run start script
-  script: /opt/jfrog/mission-control/scripts/jfmc.sh start
+  shell: /opt/jfrog/mission-control/scripts/jfmc.sh start
