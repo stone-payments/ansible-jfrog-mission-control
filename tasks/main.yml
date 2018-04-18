@@ -45,7 +45,7 @@
     state: directory
     path: "{{ jfmc_mongodb_conf_pidFile | dirname }}"
     mode: "0777"
-    when: not service_status.stat.exists
+  when: not service_status.stat.exists
 
 - name: configure SELinux file contexts for mongodb
   sefcontext:
