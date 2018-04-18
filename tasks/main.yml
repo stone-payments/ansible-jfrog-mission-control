@@ -24,7 +24,7 @@
   template:
     src: ../templates/installJFMC-redhat.sh
     dest: /opt/jfrog/mission-control/installer/jfmc-redhat-2.1.1/ansible_installJFMC-redhat.sh
-    mode: 0744
+    mode: 0755
 
 - name: Allow MongoDB to listen on tcp port 27017 (SELinux rule)
   seport:
