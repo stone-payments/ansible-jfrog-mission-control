@@ -11,7 +11,7 @@
 
 - name: Allow {{ item.name }} to listen port {{ item.port }} on SELinux
   seport:
-    ports: {{ item.port }}
+    ports: "{{ item.port }}"
     proto: tcp
     setype: http_port_t
     state: present
