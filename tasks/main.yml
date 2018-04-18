@@ -38,7 +38,7 @@
 - name: create mongodb-conf directory
   file:
     state: directory
-    path: "{{ mongodb_conf_pidFile | dirname }}"
+    path: "{{ jfmc_mongodb_conf_pidFile | dirname }}"
     mode: "0755"
 
 - name: configure SELinux file contexts for mongodb
