@@ -27,3 +27,8 @@
     target: '/var/opt/jfrog/mission-control/jfi-core/_MASTER_/data(/.*)?'
     setype: httpd_sys_content_t
     state: present
+
+- name: Ensure SELinux file context are applied
+  shell: restorecon -vr /var/opt/jfrog/mission-control/jfi-core/_MASTER_/data
+  register: restorecon
+  changed_when: restorecon.stdout != ""
