@@ -1362,7 +1362,7 @@ installMongoDB() {
 
     isMongoInstalled
 
-    if [[ $EXTERNALIZE_MONGO != "true" ]];then
+    if [[ $EXTERNALIZE_MONGO != "True" ]];then
         if [[ $IS_UPGRADE != true || $INSTALL_MONGO =~ y|Y ]]; then
             installNewMongoDB
         else
