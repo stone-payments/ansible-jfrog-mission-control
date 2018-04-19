@@ -40,14 +40,14 @@
   when: not service_status.stat.exists
   register: install_script
 
-- name: Run start script
-  shell: /opt/jfrog/mission-control/scripts/jfmc.sh start
-  when: install_script.changed
-
 - name: Ensure SELinux file context are applied
   shell: restorecon -R -v /var/opt/jfrog/mission-control/jfi-core/_MASTER_/data
   register: restorecon
   changed_when: restorecon.stdout != ""
+
+- name: Run start script
+  shell: /opt/jfrog/mission-control/scripts/jfmc.sh start
+  when: install_script.changed
 
 - name: Enable nginx service
   service:
