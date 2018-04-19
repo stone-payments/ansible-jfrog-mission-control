@@ -25,7 +25,7 @@ export EXECUTOR_BASE_URL="http://localhost:$JFMC_EXECUTOR_PORT"
 export EXECUTOR_URL="http://localhost:$JFMC_EXECUTOR_PORT/executorservice"
 export JFMC_URL="http://localhost:$JFMC_PORT"
 
-EXTERNALIZE_MONGO="{{jfmc_externalize_mongodb}}"
+EXTERNALIZE_MONGO="{{jfmc_externalize_mongodb | string }}"
 
 POSTGRES_HOME_DEFAULT=/var/opt/postgres
 POSTGRES_PATH="/opt/PostgreSQL/9.6/bin"
