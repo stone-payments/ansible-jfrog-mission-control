@@ -68,3 +68,9 @@
     name: php-fpm
     state: started
     enabled: yes
+
+- name: Enable elasticsearch service
+  service:
+    name: elasticsearch
+    state: started
+    enabled: yes
