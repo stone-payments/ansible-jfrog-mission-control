@@ -1,5 +1,5 @@
 
-- name: "Enable needed SELinux booleans ({{ item }})"
+- name: Enable needed SELinux booleans
   seboolean:
     name: "{{ item }}"
     state: yes
@@ -9,7 +9,7 @@
     - httpd_can_network_connect
     - httpd_read_user_content
 
-- name: "Allow {{ item.name }} to listen port {{ item.port }} on SELinux"
+- name: Allow jfmc micro-services to listen on non-default ports on SELinux
   seport:
     ports: "{{ item.port }}"
     proto: tcp
