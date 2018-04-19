@@ -1,7 +1,9 @@
 ---
 
-- name: Configure java
-  include_tasks: configure_java.yml
+- name: Install jdk 8
+  package:
+    name: java-1.8.0-openjdk
+    state: present
   when: jfmc_install_jdk8
 
 - name: Install openssl
