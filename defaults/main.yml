@@ -3,6 +3,9 @@
 jfmc_install_jdk8: true
 jfmc_selinux_tweaks: true
 
+jfmc_user: jfrogmc
+jfmc_group: jfrogmc
+
 # Jfrog mission control microservices ports
 jfmc_port: 8080
 jfmc_scheduler_port: 8085

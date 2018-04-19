@@ -4,8 +4,8 @@ export JFMC_HOME="/opt/jfrog/mission-control"
 export JFMC_DATA="/var/opt/jfrog/mission-control"
 export JFMC_LOGS="$JFMC_DATA/logs"
 
-export JFMC_USER=jfrogmc
-export JFMC_GROUP=jfrogmc
+export JFMC_USER={{jfmc_user}}
+export JFMC_GROUP={{jfmc_group}}
 
 export JFMC_PORT={{jfmc_port}}
 export JFMC_SCHEDULER_PORT={{jfmc_scheduler_port}}
