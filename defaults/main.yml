@@ -1,6 +1,6 @@
 ---
 # Defaults configs for stone-payments.jfrog-mission-control
-jfmc_install_jdk8: false
+jfmc_install_jdk8: true
 jfmc_selinux_tweaks: true
 
 # Jfrog mission control microservices ports

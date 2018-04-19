@@ -1,4 +1,10 @@
 ---
+- name: Install jdk 8
+  package:
+    name: java-1.8.0-openjdk
+    state: present
+  when: jfmc_install_jdk8
+
 - name: "Set JAVA Environment Variables"
   lineinfile:
     dest: /etc/environment

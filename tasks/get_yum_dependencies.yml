@@ -1,28 +1,25 @@
 ---
-# TODO: use java role.
-  - name: Install jdk 8
-    package:
-      name: java-1.8.0-openjdk
-      state: present
-    when: jfmc_install_jdk8
-  - name: Configure java
-    include_tasks: configure_java.yml
-    when: jfmc_install_jdk8
 
-  - name: Install openssl
-    package:
-      name: openssl 
-      state: present
-# TODO: Install PHP 5.4 with role.
-  - name: Install PHP
-    package:
-      name: php.x86_64
-      state: present
-  - name: Install PHP FastCGI Process Manager
-    package:
-      name: php-fpm 
-      state: present
-  - name: Install net-tools
-    package:
-      name: net-tools 
-      state: present
+- name: Configure java
+  include_tasks: configure_java.yml
+  when: jfmc_install_jdk8
+
+- name: Install openssl
+  package:
+    name: openssl 
+    state: present
+
+- name: Install PHP
+  package:
+    name: php.x86_64
+    state: present
+
+- name: Install PHP FastCGI Process Manager
+  package:
+    name: php-fpm 
+    state: present
+
+- name: Install net-tools
+  package:
+    name: net-tools 
+    state: present
