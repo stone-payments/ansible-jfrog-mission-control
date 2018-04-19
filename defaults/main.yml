@@ -1,8 +1,10 @@
 ---
 # Defaults configs for stone-payments.jfrog-mission-control
-jfmc_install_jdk8: true
-jfmc_selinux_tweaks: true
 
+jfmc_install_jdk8: true
+jfmc_selinux_tweaks: false
+
+# User to own jfmc service files
 jfmc_user: jfrogmc
 jfmc_group: jfrogmc
 
@@ -29,6 +31,7 @@ jfmc_mongodb_password: password
 jfmc_mongodb_daemon_bin: /usr/bin/mongod
 jfmc_mongodb_conf_dbPath: /var/lib/mongo
 jfmc_mongodb_conf_pidFile: /var/run/mongod/mongod.pid
+# TODO: use jinja to string in .sh template.
 jfmc_externalize_mongodb: false
 
 # jfmc internal elastic search
