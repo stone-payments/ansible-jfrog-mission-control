@@ -48,8 +48,11 @@
     group: "{{ jfmc_group }}"
     mode: 0754
 
-- name: Ensure SELinux file context are applied
-  shell: restorecon -R -v /var/opt/jfrog/mission-control/jfi-core/_MASTER_/data
+- name: Ensure SELinux file contexts are applied
+  shell: restorecon -R -v "{{ item }}"
+  with_items:
+    - "/var/opt/jfrog/mission-control/jfi-core/_MASTER_/data"
+    - "/var/opt/jfrog/mission-control/logs"
   register: restorecon
   changed_when: restorecon.stdout != ""
 

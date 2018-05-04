@@ -32,3 +32,9 @@
     target: '/var/opt/jfrog/mission-control/jfi-core/_MASTER_/data(/.*)?'
     setype: httpd_sys_content_t
     state: present
+
+- name: Allow nginx to write log files
+  sefcontext:
+    target: '/var/opt/jfrog/mission-control/logs(/.*)?'
+    setype: httpd_log_t
+    state: present
