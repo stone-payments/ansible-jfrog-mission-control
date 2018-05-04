@@ -49,10 +49,10 @@
     mode: 0754
 
 - name: Ensure SELinux file contexts are applied
-  shell: "{{ item }}"
+  shell: restorecon -R -v "{{ item }}"
   with_items:
-    - "restorecon -R -v /var/opt/jfrog/mission-control/jfi-core/_MASTER_/data"
-    - "restorecon -R -v /var/opt/jfrog/mission-control/logs"
+    - "/var/opt/jfrog/mission-control/jfi-core/_MASTER_/data"
+    - "/var/opt/jfrog/mission-control/logs"
   register: restorecon
   changed_when: restorecon.stdout != ""
 
